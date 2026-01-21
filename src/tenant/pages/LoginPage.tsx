@@ -1,14 +1,21 @@
-import { FormEvent, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { registerClient } from '../services/auth'
+import { FormEvent, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { loginTenant } from '../services/auth'
 
-const RegisterPage = () => {
+const LoginPage = () => {
   const navigate = useNavigate()
-  const [name, setName] = useState('')
+  const [tenantSlug, setTenantSlug] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('tenant_token')
+    if (token) {
+      navigate('/tenant/products')
+    }
+  }, [navigate])
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -16,10 +23,10 @@ const RegisterPage = () => {
     setLoading(true)
 
     try {
-      await registerClient({ name, email, password })
-      navigate('/client/tenants')
+      await loginTenant({ tenantSlug, email, password })
+      navigate('/tenant/products')
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'No se pudo crear la cuenta'
+      const message = err instanceof Error ? err.message : 'No se pudo iniciar sesion'
       setError(message)
     } finally {
       setLoading(false)
@@ -27,33 +34,33 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="page-shell client-auth">
+    <div className="page-shell tenant-auth">
       <div className="login-wrap">
-        <div className="login-hero client-hero">
-          <div className="tagline">Cuenta empresarial</div>
-          <h1>Registra tu cuenta y crea tus negocios</h1>
-          <p>Accede al panel central para administrar multiples negocios y sus llaves API.</p>
+        <div className="login-hero tenant-hero">
+          <div className="tagline">Panel operativo</div>
+          <h1>Acceso para administradores del negocio</h1>
+          <p>Gestiona productos, eventos, ventas y cupones desde el panel operativo.</p>
         </div>
 
         <div className="card">
-          <h2>Crear cuenta</h2>
+          <h2>Ingresar al negocio</h2>
           <form onSubmit={handleSubmit} className="split">
             <label className="input-group">
-              Nombre del propietario
+              Slug del negocio
               <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="Tu nombre"
+                value={tenantSlug}
+                onChange={(event) => setTenantSlug(event.target.value)}
+                placeholder="vinos-aranjuez"
                 required
               />
             </label>
             <label className="input-group">
-              Email corporativo
+              Email
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="tu@empresa.com"
+                placeholder="admin@negocio.com"
                 required
               />
             </label>
@@ -69,11 +76,11 @@ const RegisterPage = () => {
             </label>
             {error ? <div className="error">{error}</div> : null}
             <button className="primary-btn" type="submit" disabled={loading}>
-              {loading ? 'Registrando...' : 'Crear cuenta'}
+              {loading ? 'Ingresando...' : 'Entrar al panel'}
             </button>
             <div className="helper-row">
-              <span>¿Ya tienes cuenta?</span>
-              <Link to="/client/login">Inicia sesion</Link>
+              <span>¿Olvidaste tu clave?</span>
+              <a href="/tenant/forgot">Recuperar</a>
             </div>
           </form>
         </div>
@@ -82,4 +89,4 @@ const RegisterPage = () => {
   )
 }
 
-export default RegisterPage
+export default LoginPage

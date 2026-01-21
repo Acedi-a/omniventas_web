@@ -589,6 +589,7 @@ const TenantsPage = () => {
                 <th>Ultima actividad</th>
                 <th>Estado</th>
                 <th>Creado</th>
+                <th>Slug</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -623,6 +624,7 @@ const TenantsPage = () => {
                       </span>
                     </td>
                     <td>{new Date(tenant.createdAt).toLocaleDateString()}</td>
+                    <td className="mono">{tenant.slug}</td>
                     <td>
                       <div className="action-row">
                         <button className="ghost-btn" onClick={() => navigate(`/admin/tenants/${tenant.id}`)}>

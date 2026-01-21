@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
 
-export const getClientToken = () => localStorage.getItem('owner_token')
+export const getTenantToken = () => localStorage.getItem('tenant_token')
 
 type HttpOptions = {
   method?: string
@@ -10,7 +10,7 @@ type HttpOptions = {
 }
 
 const buildHeaders = (auth: boolean, headers?: Record<string, string>) => {
-  const token = getClientToken()
+  const token = getTenantToken()
   return {
     ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
     ...headers,

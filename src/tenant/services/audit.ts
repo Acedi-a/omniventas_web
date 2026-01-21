@@ -1,0 +1,44 @@
+import { apiFetch } from './http'
+
+export type AuditLog = {
+  id: number
+  action: string
+  accountId?: number | null
+  tenantId?: number | null
+  userId?: number | null
+  metadata?: string | null
+  createdAt: string
+}
+
+export type AuditPagedResponse = {
+  items: AuditLog[]
+  totalCount: number
+  page: number
+  pageSize: number
+}
+
+export type AuditQuery = {
+  action?: string
+  userId?: string
+  metadata?: string
+  from?: string
+  to?: string
+  page?: number
+  pageSize?: number
+}
+
+const buildQuery = (query: AuditQuery) => {
+  const params = new URLSearchParams()
+  if (query.action) params.set('action', query.action)
+  if (query.userId) params.set('userId', query.userId)
+  if (query.metadata) params.set('metadata', query.metadata)
+  if (query.from) params.set('from', query.from)
+  if (query.to) params.set('to', query.to)
+  if (query.page) params.set('page', String(query.page))
+  if (query.pageSize) params.set('pageSize', String(query.pageSize))
+  const suffix = params.toString()
+  return suffix ? `?${suffix}` : ''
+}
+
+export const fetchTenantAuditLogs = (query: AuditQuery) =>
+  apiFetch<AuditPagedResponse>(`/api/tenant/audit${buildQuery(query)}`)

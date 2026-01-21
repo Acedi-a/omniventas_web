@@ -3,6 +3,7 @@ import { apiFetch, apiFetchText } from './http'
 export type Tenant = {
   id: number
   name: string
+  slug: string
   apiKey: string
   businessType: number
   isActive: boolean
@@ -60,6 +61,7 @@ export type TenantTrendPoint = {
 export type RecentTenant = {
   id: number
   name: string
+  slug?: string
   businessType: number
   isActive: boolean
   createdAt: string

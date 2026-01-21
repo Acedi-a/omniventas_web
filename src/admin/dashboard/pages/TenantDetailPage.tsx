@@ -105,6 +105,7 @@ const TenantDetailPage = () => {
           <div className="tagline">Perfil</div>
           <h2>{tenant.name}</h2>
           <p>Tipo: {businessTypes[tenant.businessType] ?? tenant.businessType}</p>
+          <p className="mono">Slug: {tenant.slug}</p>
           <p>Creado: {new Date(tenant.createdAt).toLocaleDateString()}</p>
           <p>
             Estado:{' '}
@@ -112,6 +113,9 @@ const TenantDetailPage = () => {
               {tenant.isActive ? 'Activo' : 'Inactivo'}
             </span>
           </p>
+          <button className="ghost-btn" onClick={() => navigator.clipboard.writeText(tenant.slug)}>
+            Copiar slug
+          </button>
         </div>
         <div>
           <div className="tagline">API Key</div>

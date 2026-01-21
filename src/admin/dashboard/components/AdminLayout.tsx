@@ -28,6 +28,7 @@ const AdminLayout = ({ title, subtitle, children }: AdminLayoutProps) => {
   const { pathname } = useLocation()
   const isTenants = pathname.startsWith('/admin/tenants')
   const isHealth = pathname.startsWith('/admin/health')
+  const isAudit = pathname.startsWith('/admin/audit')
 
   return (
     <div className="page-shell">
@@ -41,6 +42,9 @@ const AdminLayout = ({ title, subtitle, children }: AdminLayoutProps) => {
         <nav className="nav-links">
           <Link className={`nav-link ${isTenants ? 'active' : ''}`} to="/admin/tenants">
             Tenants
+          </Link>
+          <Link className={`nav-link ${isAudit ? 'active' : ''}`} to="/admin/audit">
+            Auditoria
           </Link>
           <Link className={`nav-link ${isHealth ? 'active' : ''}`} to="/admin/health">
             Health

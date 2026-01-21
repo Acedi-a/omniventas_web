@@ -1,34 +1,38 @@
 import { ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { logoutClient } from '../services/auth'
+import { logoutTenant } from '../services/auth'
 
-type ClientLayoutProps = {
+type TenantLayoutProps = {
   title: string
   subtitle?: string
   children: ReactNode
 }
 
-const ClientLayout = ({ title, subtitle, children }: ClientLayoutProps) => {
+const TenantLayout = ({ title, subtitle, children }: TenantLayoutProps) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const ownerEmail = localStorage.getItem('owner_email') ?? 'Cuenta empresarial'
+  const tenantName = localStorage.getItem('tenant_name') ?? 'Negocio'
 
   const handleLogout = () => {
-    logoutClient()
-    navigate('/client/login')
+    logoutTenant()
+    navigate('/tenant/login')
   }
 
   const links = [
-    { to: '/client/tenants', label: 'Mis negocios' },
-    { to: '/client/audit', label: 'Auditoria' },
+    { to: '/tenant/products', label: 'Productos' },
+    { to: '/tenant/events', label: 'Eventos' },
+    { to: '/tenant/orders', label: 'Ordenes' },
+    { to: '/tenant/coupons', label: 'Cupones' },
+    { to: '/tenant/api-key', label: 'API Key' },
+    { to: '/tenant/audit', label: 'Auditoria' },
   ]
 
   return (
-    <div className="page-shell client-shell">
-      <header className="header-bar client-header">
+    <div className="page-shell tenant-shell">
+      <header className="header-bar tenant-header">
         <div>
-          <div className="tagline">Cuenta empresarial</div>
-          <div className="brand-title">{ownerEmail}</div>
+          <div className="tagline">Panel del negocio</div>
+          <div className="brand-title">{tenantName}</div>
         </div>
         <nav className="nav-links">
           {links.map((link) => (
@@ -59,4 +63,4 @@ const ClientLayout = ({ title, subtitle, children }: ClientLayoutProps) => {
   )
 }
 
-export default ClientLayout
+export default TenantLayout

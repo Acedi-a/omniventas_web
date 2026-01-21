@@ -198,6 +198,36 @@ a {
   color: #8a2b1f;
 }
 
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  margin-top: 6px;
+  color: var(--slate);
+}
+
+.status-chip.ok {
+  color: #1b5655;
+}
+
+.status-chip.warn {
+  color: #8a2b1f;
+}
+
+.thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(31, 42, 51, 0.12);
+}
+
+.thumb.preview {
+  width: 72px;
+  height: 72px;
+}
+
 .action-row {
   display: flex;
   flex-wrap: wrap;
@@ -222,6 +252,10 @@ a {
   margin: 0 0 8px;
   font-size: 0.95rem;
   color: var(--slate);
+}
+
+.client-shell .metrics-grid {
+  margin-top: 12px;
 }
 
 .api-key {
@@ -374,6 +408,22 @@ a {
 
 .client-auth {
   background: radial-gradient(circle at top, #f4f8fb 0%, #eef3f6 45%, #e7ecef 100%);
+}
+
+.tenant-shell {
+  background: radial-gradient(circle at top, #f7f2ed 0%, #f0ebe2 45%, #e7e0d5 100%);
+}
+
+.tenant-header {
+  background: linear-gradient(120deg, rgba(132, 93, 42, 0.14), rgba(193, 130, 80, 0.18));
+}
+
+.tenant-auth {
+  background: radial-gradient(circle at top, #fdf8f1 0%, #f4ebe0 45%, #e8dfd2 100%);
+}
+
+.tenant-hero {
+  background: linear-gradient(145deg, rgba(132, 93, 42, 0.2), rgba(193, 130, 80, 0.18));
 }
 
 .helper-row {

@@ -1,14 +1,20 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginClient } from '../services/auth'
 
 const LoginPage = () => {
   const navigate = useNavigate()
-  const [apiKey, setApiKey] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('owner_token')
+    if (token) {
+      navigate('/client/tenants')
+    }
+  }, [navigate])
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -16,8 +22,8 @@ const LoginPage = () => {
     setLoading(true)
 
     try {
-      await loginClient({ apiKey, email, password })
-      navigate('/client/dashboard')
+      await loginClient({ email, password })
+      navigate('/client/tenants')
     } catch (err) {
       const message = err instanceof Error ? err.message : 'No se pudo iniciar sesion'
       setError(message)
@@ -30,23 +36,14 @@ const LoginPage = () => {
     <div className="page-shell client-auth">
       <div className="login-wrap">
         <div className="login-hero client-hero">
-          <div className="tagline">Portal de negocios</div>
-          <h1>Gestiona tu tienda con OmniVenta</h1>
-          <p>Accede al panel para controlar productos, eventos, ventas y la API de tu negocio.</p>
+          <div className="tagline">Portal empresarial</div>
+          <h1>Administra tus negocios desde un solo lugar</h1>
+          <p>Controla multiples marcas, llaves API y configuraciones de cada negocio.</p>
         </div>
 
         <div className="card">
           <h2>Ingresar</h2>
           <form onSubmit={handleSubmit} className="split">
-            <label className="input-group">
-              API Key
-              <input
-                value={apiKey}
-                onChange={(event) => setApiKey(event.target.value)}
-                placeholder="tn_live_xxx"
-                required
-              />
-            </label>
             <label className="input-group">
               Email
               <input
@@ -73,7 +70,7 @@ const LoginPage = () => {
             </button>
             <div className="helper-row">
               <span>¿No tienes cuenta?</span>
-              <Link to="/client/register">Crear negocio</Link>
+              <Link to="/client/register">Crear cuenta</Link>
             </div>
           </form>
         </div>

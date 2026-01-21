@@ -1,20 +1,20 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
 
-export const getAuthToken = () => localStorage.getItem('admin_token')
-
-const buildHeaders = (auth: boolean, headers?: Record<string, string>) => {
-  const token = getAuthToken()
-  return {
-    ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
-    ...headers,
-  }
-}
+export const getClientToken = () => localStorage.getItem('client_token')
 
 type HttpOptions = {
   method?: string
   body?: unknown
   auth?: boolean
   headers?: Record<string, string>
+}
+
+const buildHeaders = (auth: boolean, headers?: Record<string, string>) => {
+  const token = getClientToken()
+  return {
+    ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
+    ...headers,
+  }
 }
 
 export const apiFetch = async <T>(path: string, options: HttpOptions = {}): Promise<T> => {
@@ -41,26 +41,4 @@ export const apiFetch = async <T>(path: string, options: HttpOptions = {}): Prom
   }
 
   return response.json() as Promise<T>
-}
-
-export const apiFetchText = async (path: string, options: HttpOptions = {}): Promise<string> => {
-  const { auth = true, headers, method } = options
-
-  const response = await fetch(`${API_URL}${path}`, {
-    method: method ?? 'GET',
-    headers: buildHeaders(auth, headers),
-  })
-
-  if (!response.ok) {
-    let message = 'Error inesperado'
-    try {
-      const data = await response.json()
-      message = data?.error ?? message
-    } catch {
-      // ignore
-    }
-    throw new Error(message)
-  }
-
-  return response.text()
 }

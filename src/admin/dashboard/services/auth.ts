@@ -18,9 +18,12 @@ export const loginAdmin = async (payload: LoginPayload) => {
   })
 
   localStorage.setItem('admin_token', response.token)
+  localStorage.setItem('admin_token_expires', response.expiresAt)
+  localStorage.setItem('admin_last_login', new Date().toISOString())
   return response
 }
 
 export const logoutAdmin = () => {
   localStorage.removeItem('admin_token')
+  localStorage.removeItem('admin_token_expires')
 }
